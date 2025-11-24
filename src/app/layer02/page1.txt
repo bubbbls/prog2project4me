@@ -1,0 +1,34 @@
+"use client";
+import { db } from "~/server/db";
+import { posts } from "~/server/db/schema";
+import Link from "next/link";
+import { useState, useEffect } from "react";
+
+const mockUrls = ["https://4tvo5hfej7.ufs.sh/f/rDDOPmmigjTX2Pplc4DygZIGKQ4BYLqrfzNUpasiT138nFj2"]
+const mockImages = mockUrls.map((url, index) => ({
+  id: index + 1,
+  url,
+}));
+
+export default async function main() {
+  const data = await db.query.posts.findMany({
+    columns: {
+      content: true,
+      title: true,
+    },
+  })
+ 
+      return (<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      {data.map((data,index) => (
+        <div key={index} className="card w-96 bg-base-100 shadow-sm">
+          <div className="card-body">
+            <h2 className="card-title">{data.title}</h2>
+            <p>{data.content}</p>
+            <div className="justify-end card-actions">
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+      );
+    }
